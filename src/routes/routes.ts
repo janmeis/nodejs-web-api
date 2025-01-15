@@ -186,11 +186,6 @@ export const setRoutes = (app: Express) => {
    *     summary: Get song information
    *     parameters:
    *       - in: query
-   *         name: filter
-   *         schema:
-   *           type: string
-   *         description: Filter for the song list
-   *       - in: query
    *         name: artist
    *         schema:
    *           type: string

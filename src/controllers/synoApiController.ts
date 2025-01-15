@@ -144,7 +144,6 @@ export class SynoApiController {
       const sortDirection = req.query.sortDirection || 'asc';
       const limit = req.query.limit || config.get<string>('synoUrl.limit');
       const offset = req.query.offset || 0;
-      const filter = req.query.filter || null;
      
       let url = `${SynoApiController.baseUrl}/AudioStation/song.cgi?api=SYNO.AudioStation.Song&version=3&method=list`
         + `&_sid=${SynoApiController.sid}`
@@ -158,8 +157,6 @@ export class SynoApiController {
         url += `&artist=${encodeURIComponent(`${artist}`)}`;
       if (album)
         url += `&album=${encodeURIComponent(`${album}`)}`;
-      if (filter)
-        url += `&filter=${encodeURIComponent(`${filter}`)}`;
       console.log(url);
 
       const response = await axios.get(url);
