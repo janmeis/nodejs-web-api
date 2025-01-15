@@ -1,12 +1,12 @@
-import { Request, Response } from "express";
-import axios from "axios";
-import config from "config";
-import { formatDuration } from "../utils";
-import { IFolder } from "../model/folder";
+import { Request, Response } from 'express';
+import axios from 'axios';
+import config from 'config';
+import { formatDuration } from '../utils';
+import { IFolder } from '../model/folder';
 
 export class SynoApiController {
-  private static readonly baseUrl = config.get<string>("synoUrl.base");
-  private static sid = "";
+  private static readonly baseUrl = config.get<string>('synoUrl.base');
+  private static sid = '';
 
   public static async info(_: Request, res: Response): Promise<void> {
     try {
@@ -17,18 +17,18 @@ export class SynoApiController {
       res.json(response.data);
     } catch (error) {
       const errorMessage =
-        error instanceof Error ? error.message : "An unknown error occurred";
+        error instanceof Error ? error.message : 'An unknown error occurred';
       res.status(500).json({ error: errorMessage });
     }
   }
 
   public static async auth(_: Request, res: Response): Promise<void> {
     try {
-      const account = config.get<string>("synoUrl.account");
-      const encodedPassword = config.get<string>("synoUrl.passwd");
+      const account = config.get<string>('synoUrl.account');
+      const encodedPassword = config.get<string>('synoUrl.passwd');
 
       // Decode the Base64-encoded password
-      const password = Buffer.from(encodedPassword, "base64").toString("utf-8");
+      const password = Buffer.from(encodedPassword, 'base64').toString('utf-8');
 
       const url = `${SynoApiController.baseUrl}/auth.cgi?api=SYNO.API.Auth&version=7&method=login&account=${account}&passwd=${password}&format=sid`;
       console.log(url);
@@ -38,7 +38,7 @@ export class SynoApiController {
       res.json(response.data);
     } catch (error) {
       const errorMessage =
-        error instanceof Error ? error.message : "An unknown error occurred";
+        error instanceof Error ? error.message : 'An unknown error occurred';
       res.status(500).json({ error: errorMessage });
     }
   }
@@ -46,9 +46,9 @@ export class SynoApiController {
   public static async folder(req: Request, res: Response): Promise<void> {
     try {
       const dirId = req.query.dirId || null;
-      const sortBy = req.query.sortBy || "title";
-      const sortDirection = req.query.sortDirection || "asc";
-      const limit = req.query.limit || config.get<string>("synoUrl.limit");
+      const sortBy = req.query.sortBy || 'title';
+      const sortDirection = req.query.sortDirection || 'asc';
+      const limit = req.query.limit || config.get<string>('synoUrl.limit');
       const offset = req.query.offset || 0;
 
       let url =
@@ -58,7 +58,7 @@ export class SynoApiController {
         `&offset=${offset}` +
         `&sort_by=${sortBy}` +
         `&sort_direction=${sortDirection}` +
-        `&additional=${encodeURIComponent("song_tag,song_audio,song_rating")}`;
+        `&additional=${encodeURIComponent('song_tag,song_audio,song_rating')}`;
 
       if (dirId) url += `&id=${dirId}`;
       console.log(url);
@@ -79,16 +79,16 @@ export class SynoApiController {
       res.json(folders);
     } catch (error) {
       const errorMessage =
-        error instanceof Error ? error.message : "An unknown error occurred";
+        error instanceof Error ? error.message : 'An unknown error occurred';
       res.status(500).json({ error: errorMessage });
     }
   }
 
   public static async artist(req: Request, res: Response): Promise<void> {
     try {
-      const sortBy = req.query.sortBy || "name";
-      const sortDirection = req.query.sortDirection || "asc";
-      const limit = req.query.limit || config.get<string>("synoUrl.limit");
+      const sortBy = req.query.sortBy || 'name';
+      const sortDirection = req.query.sortDirection || 'asc';
+      const limit = req.query.limit || config.get<string>('synoUrl.limit');
       const offset = req.query.offset || 0;
       const filter = req.query.filter || null;
 
@@ -110,17 +110,17 @@ export class SynoApiController {
       res.json(artists);
     } catch (error) {
       const errorMessage =
-        error instanceof Error ? error.message : "An unknown error occurred";
+        error instanceof Error ? error.message : 'An unknown error occurred';
       res.status(500).json({ error: errorMessage });
     }
   }
 
   public static async album(req: Request, res: Response): Promise<void> {
     try {
-      const artist = req.query.artist || "";
-      const sortBy = req.query.sortBy || "year";
-      const sortDirection = req.query.sortDirection || "asc";
-      const limit = req.query.limit || config.get<string>("synoUrl.limit");
+      const artist = req.query.artist || '';
+      const sortBy = req.query.sortBy || 'year';
+      const sortDirection = req.query.sortDirection || 'asc';
+      const limit = req.query.limit || config.get<string>('synoUrl.limit');
       const offset = req.query.offset || 0;
       const filter = req.query.filter || null;
 
@@ -143,18 +143,18 @@ export class SynoApiController {
       res.json(albums);
     } catch (error) {
       const errorMessage =
-        error instanceof Error ? error.message : "An unknown error occurred";
+        error instanceof Error ? error.message : 'An unknown error occurred';
       res.status(500).json({ error: errorMessage });
     }
   }
 
   public static async song(req: Request, res: Response): Promise<void> {
     try {
-      const artist = req.query.artist || "";
-      const album = req.query.album || "";
-      const sortBy = req.query.sortBy || "year";
-      const sortDirection = req.query.sortDirection || "asc";
-      const limit = req.query.limit || config.get<string>("synoUrl.limit");
+      const artist = req.query.artist || '';
+      const album = req.query.album || '';
+      const sortBy = req.query.sortBy || 'year';
+      const sortDirection = req.query.sortDirection || 'asc';
+      const limit = req.query.limit || config.get<string>('synoUrl.limit');
       const offset = req.query.offset || 0;
 
       let url =
@@ -164,7 +164,7 @@ export class SynoApiController {
         `&offset=${offset}` +
         `&sort_by=${sortBy}` +
         `&sort_direction=${sortDirection}` +
-        `&additional=${encodeURIComponent("song_tag,song_audio,song_rating")}`;
+        `&additional=${encodeURIComponent('song_tag,song_audio,song_rating')}`;
 
       if (artist) url += `&artist=${encodeURIComponent(`${artist}`)}`;
       if (album) url += `&album=${encodeURIComponent(`${album}`)}`;
@@ -186,7 +186,7 @@ export class SynoApiController {
       res.json(songs);
     } catch (error) {
       const errorMessage =
-        error instanceof Error ? error.message : "An unknown error occurred";
+        error instanceof Error ? error.message : 'An unknown error occurred';
       res.status(500).json({ error: errorMessage });
     }
   }
