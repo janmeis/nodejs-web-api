@@ -1,5 +1,5 @@
-import { Express } from 'express';
-import { SynoApiController } from '../controllers/synoApiController';
+import { Express } from "express";
+import { SynoApiController } from "../controllers/synoApiController";
 
 export const setRoutes = (app: Express) => {
   /**
@@ -19,7 +19,7 @@ export const setRoutes = (app: Express) => {
    *                   type: string
    *                   example: Syno API Info
    */
-  app.get('/syno/info', SynoApiController.info);
+  app.get("/syno/info", SynoApiController.info);
 
   /**
    * @swagger
@@ -38,7 +38,7 @@ export const setRoutes = (app: Express) => {
    *                   type: string
    *                   example: Authentication successful
    */
-  app.get('/syno/auth', SynoApiController.auth);
+  app.get("/syno/auth", SynoApiController.auth);
 
   /**
    * @swagger
@@ -84,7 +84,7 @@ export const setRoutes = (app: Express) => {
    *                   title:
    *                     type: string
    */
-  app.get('/syno/folder', SynoApiController.folder);
+  app.get("/syno/folder", SynoApiController.folder);
 
   /**
    * @swagger
@@ -125,7 +125,7 @@ export const setRoutes = (app: Express) => {
    *               items:
    *                 type: string
    */
-  app.get('/syno/artist', SynoApiController.artist);
+  app.get("/syno/artist", SynoApiController.artist);
 
   /**
    * @swagger
@@ -177,7 +177,7 @@ export const setRoutes = (app: Express) => {
    *                   title:
    *                     type: string
    */
-  app.get('/syno/album', SynoApiController.album);
+  app.get("/syno/album", SynoApiController.album);
 
   /**
    * @swagger
@@ -240,5 +240,5 @@ export const setRoutes = (app: Express) => {
    *                   filesize:
    *                     type: integer
    */
-  app.get('/syno/song', SynoApiController.song);
+  app.get("/syno/song", SynoApiController.song);
 };
