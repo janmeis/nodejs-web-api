@@ -45,17 +45,44 @@ export const setRoutes = (app: Express) => {
    * /syno/folder:
    *   get:
    *     summary: Get folder information
+   *     parameters:
+   *       - in: query
+   *         name: dirId
+   *         schema:
+   *           type: string
+   *         description: The ID of the directory to list
+   *       - in: query
+   *         name: sortBy
+   *         schema:
+   *           type: string
+   *           default: name
+   *         description: The field to sort by
+   *       - in: query
+   *         name: sortDirection
+   *         schema:
+   *           type: string
+   *           default: asc
+   *         description: The direction to sort (asc or desc)
+   *       - in: query
+   *         name: limit
+   *         schema:
+   *           type: integer
+   *           default: 20000
+   *         description: The maximum number of items to return
    *     responses:
    *       200:
    *         description: Folder information
    *         content:
    *           application/json:
    *             schema:
-   *               type: object
-   *               properties:
-   *                 message:
-   *                   type: string
-   *                   example: Folder information
+   *               type: array
+   *               items:
+   *                 type: object
+   *                 properties:
+   *                   id:
+   *                     type: string
+   *                   title:
+   *                     type: string
    */
   app.get('/syno/folder', SynoApiController.folder);
 };
