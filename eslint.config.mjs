@@ -1,3 +1,5 @@
+// https://youtu.be/413C1PlYIko?si=Nxf6Endy1NK5XMUd
+
 import globals from 'globals';
 import pluginJs from '@eslint/js';
 import tseslint from 'typescript-eslint';
@@ -18,7 +20,7 @@ export default [
       '@typescript-eslint/no-unused-vars': 'off',
       '@typescript-eslint/semi': 'warn',
       '@typescript-eslint/no-explicit-any': 'off',
-      'prettier/prettier': ['error', { singleQuote: true }],
+      'prettier/prettier': ['warn', { singleQuote: true }],
     },
   },
   eslintPluginPrettierRecommended,

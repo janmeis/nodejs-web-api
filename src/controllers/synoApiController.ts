@@ -11,10 +11,9 @@ export class SynoApiController {
   public static async info(_: Request, res: Response): Promise<void> {
     try {
       const url = `${SynoApiController.baseUrl}/query.cgi?api=SYNO.API.Info&version=1&method=query`;
-      console.log(url);
 
       const response = await axios.get(url);
-      res.json(response.data);
+      res.json(response.data.data);
     } catch (error) {
       const errorMessage =
         error instanceof Error ? error.message : 'An unknown error occurred';
@@ -31,7 +30,6 @@ export class SynoApiController {
       const password = Buffer.from(encodedPassword, 'base64').toString('utf-8');
 
       const url = `${SynoApiController.baseUrl}/auth.cgi?api=SYNO.API.Auth&version=7&method=login&account=${account}&passwd=${password}&format=sid`;
-      console.log(url);
 
       const response = await axios.get(url);
       SynoApiController.sid = response.data.data.sid;
@@ -61,7 +59,6 @@ export class SynoApiController {
         `&additional=${encodeURIComponent('song_tag,song_audio,song_rating')}`;
 
       if (dirId) url += `&id=${dirId}`;
-      console.log(url);
 
       const response = await axios.get(url);
       const folders = (response.data.data.items as any[]).map((item) => {
@@ -101,12 +98,11 @@ export class SynoApiController {
         `&sort_direction=${sortDirection}`;
 
       if (filter) url += `&filter=${encodeURIComponent(`${filter}`)}`;
-      console.log(url);
 
       const response = await axios.get(url);
-      const artists = (response.data.data.artists as any[]).map(
-        (item) => item.name,
-      );
+      const artists = (response.data.data.artists as any[]).map((item) => ({
+        name: item.name,
+      }));
       res.json(artists);
     } catch (error) {
       const errorMessage =
@@ -134,12 +130,13 @@ export class SynoApiController {
 
       if (artist) url += `&artist=${encodeURIComponent(`${artist}`)}`;
       if (filter) url += `&filter=${encodeURIComponent(`${filter}`)}`;
-      console.log(url);
 
       const response = await axios.get(url);
-      const albums = (response.data.data.albums as any[]).map(
-        (item) => `${item.display_artist}, ${item.name}, ${item.year}`,
-      );
+      const albums = (response.data.data.albums as any[]).map((item) => ({
+        artist: `${item.display_artist}` ? item.display_artist : item.artist,
+        album: item.name,
+        year: item.year,
+      }));
       res.json(albums);
     } catch (error) {
       const errorMessage =
@@ -168,7 +165,6 @@ export class SynoApiController {
 
       if (artist) url += `&artist=${encodeURIComponent(`${artist}`)}`;
       if (album) url += `&album=${encodeURIComponent(`${album}`)}`;
-      console.log(url);
 
       const response = await axios.get(url);
       const songs = (response.data.data.songs as any[]).map((item) => {
@@ -191,10 +187,15 @@ export class SynoApiController {
     }
   }
 
-  private static populateSong(additional: any): any {
+  private static populateSong(additional: any): Partial<IFolder> {
+    const artist = `${additional.song_tag.album_artist}`
+      ? additional.song_tag.album_artist
+      : additional.song_tag.artist;
     return {
-      time: +additional.song_audio.duration,
-      timeString: formatDuration(+additional.song_audio.duration),
+      artist: artist,
+      album: additional.song_tag.album,
+      duration: +additional.song_audio.duration,
+      durationString: formatDuration(+additional.song_audio.duration),
       filesize: +additional.song_audio.filesize,
       filesizeString: `${(additional.song_audio.filesize / 1024 / 1024).toFixed(2)} MB`,
       disc: +additional.song_tag.disc,

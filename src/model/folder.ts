@@ -1,8 +1,10 @@
 export interface IFolder {
   id: string;
   title: string;
-  time?: number;
-  timeString?: string;
+  album?: string;
+  artist?: string;
+  duration?: number;
+  durationString?: string;
   filesize?: number;
   filesizeString?: string;
   disc?: number;
