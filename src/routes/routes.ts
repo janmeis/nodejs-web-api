@@ -69,6 +69,12 @@ export const setRoutes = (app: Express) => {
    *           type: integer
    *           default: 20000
    *         description: The maximum number of items to return
+   *       - in: query
+   *         name: offset
+   *         schema:
+   *           type: integer
+   *           default: 0
+   *         description: The offset of the first item
    *     responses:
    *       200:
    *         description: Folder information

@@ -3,8 +3,11 @@ import swaggerUi from 'swagger-ui-express';
 import swaggerJsdoc from 'swagger-jsdoc';
 import config from 'config';
 import { setRoutes } from './routes/routes';
+import cors from 'cors';
 
 const app = express();
+app.use(cors({ origin: true }));
+app.use(express.urlencoded({ extended: true }));
 const PORT = config.get<number>('port') || 3000;
 
 // Swagger definition

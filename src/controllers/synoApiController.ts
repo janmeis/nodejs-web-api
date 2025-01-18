@@ -8,13 +8,23 @@ export class SynoApiController {
   private static readonly baseUrl = config.get<string>('synoUrl.base');
   private static sid = '';
 
+  constructor() {
+    axios.interceptors.request.use((config) => {
+      config.timeout = 5000; // Wait for 5 seconds before timing out
+      return config;
+    });
+  }
+
   public static async info(_: Request, res: Response): Promise<void> {
     try {
       const url = `${SynoApiController.baseUrl}/query.cgi?api=SYNO.API.Info&version=1&method=query`;
+      console.log(url);
 
       const response = await axios.get(url);
+      console.log(response.data);
       res.json(response.data.data);
     } catch (error) {
+      console.log(error);
       const errorMessage =
         error instanceof Error ? error.message : 'An unknown error occurred';
       res.status(500).json({ error: errorMessage });
@@ -97,7 +107,7 @@ export class SynoApiController {
         `&sort_by=${sortBy}` +
         `&sort_direction=${sortDirection}`;
 
-      if (filter) url += `&filter=${encodeURIComponent(`${filter}`)}`;
+      if (filter) url += `&filter=${filter}`;
 
       const response = await axios.get(url);
       const artists = (response.data.data.artists as any[]).map((item) => ({
@@ -128,8 +138,8 @@ export class SynoApiController {
         `&sort_by=${sortBy}` +
         `&sort_direction=${sortDirection}`;
 
-      if (artist) url += `&artist=${encodeURIComponent(`${artist}`)}`;
-      if (filter) url += `&filter=${encodeURIComponent(`${filter}`)}`;
+      if (artist) url += `&artist=${artist}`;
+      if (filter) url += `&filter=${filter}`;
 
       const response = await axios.get(url);
       const albums = (response.data.data.albums as any[]).map((item) => ({
@@ -163,8 +173,8 @@ export class SynoApiController {
         `&sort_direction=${sortDirection}` +
         `&additional=${encodeURIComponent('song_tag,song_audio,song_rating')}`;
 
-      if (artist) url += `&artist=${encodeURIComponent(`${artist}`)}`;
-      if (album) url += `&album=${encodeURIComponent(`${album}`)}`;
+      if (artist) url += `&artist=${artist}`;
+      if (album) url += `&album=${album}`;
 
       const response = await axios.get(url);
       const songs = (response.data.data.songs as any[]).map((item) => {

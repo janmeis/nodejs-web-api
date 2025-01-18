@@ -18,9 +18,13 @@ export default [
   {
     rules: {
       '@typescript-eslint/no-unused-vars': 'off',
-      '@typescript-eslint/semi': 'warn',
       '@typescript-eslint/no-explicit-any': 'off',
-      'prettier/prettier': ['warn', { singleQuote: true }],
+      '@typescript-eslint/semi': ['warn', 'always'],
+      'prettier/prettier': [
+        'warn',
+        { singleQuote: true },
+        { SemicolonPreference: 'always' },
+      ],
     },
   },
   eslintPluginPrettierRecommended,
