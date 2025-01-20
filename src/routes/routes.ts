@@ -1,10 +1,17 @@
 import { Express } from 'express';
-import { SynoApiController } from '../controllers/synoApiController';
+import {
+  info,
+  auth,
+  folder,
+  artist,
+  album,
+  song,
+} from '../controllers/synoApiController';
 
 export const setRoutes = (app: Express) => {
   /**
    * @swagger
-   * /syno/info:
+   * /info:
    *   get:
    *     summary: Get Syno API Info
    *     responses:
@@ -19,11 +26,11 @@ export const setRoutes = (app: Express) => {
    *                   type: string
    *                   example: Syno API Info
    */
-  app.get('/syno/info', SynoApiController.info);
+  app.get('/info', info);
 
   /**
    * @swagger
-   * /syno/auth:
+   * /auth:
    *   get:
    *     summary: Authenticate with Syno API
    *     responses:
@@ -38,11 +45,11 @@ export const setRoutes = (app: Express) => {
    *                   type: string
    *                   example: Authentication successful
    */
-  app.get('/syno/auth', SynoApiController.auth);
+  app.get('/auth', auth);
 
   /**
    * @swagger
-   * /syno/folder:
+   * /folder:
    *   get:
    *     summary: Get folder information
    *     parameters:
@@ -90,11 +97,11 @@ export const setRoutes = (app: Express) => {
    *                   title:
    *                     type: string
    */
-  app.get('/syno/folder', SynoApiController.folder);
+  app.get('/folder', folder);
 
   /**
    * @swagger
-   * /syno/artist:
+   * /artist:
    *   get:
    *     summary: Get artist information
    *     parameters:
@@ -131,11 +138,11 @@ export const setRoutes = (app: Express) => {
    *               items:
    *                 type: string
    */
-  app.get('/syno/artist', SynoApiController.artist);
+  app.get('/artist', artist);
 
   /**
    * @swagger
-   * /syno/album:
+   * /album:
    *   get:
    *     summary: Get album information
    *     parameters:
@@ -183,11 +190,11 @@ export const setRoutes = (app: Express) => {
    *                   title:
    *                     type: string
    */
-  app.get('/syno/album', SynoApiController.album);
+  app.get('/album', album);
 
   /**
    * @swagger
-   * /syno/song:
+   * /song:
    *   get:
    *     summary: Get song information
    *     parameters:
@@ -246,5 +253,5 @@ export const setRoutes = (app: Express) => {
    *                   filesize:
    *                     type: integer
    */
-  app.get('/syno/song', SynoApiController.song);
+  app.get('/song', song);
 };
