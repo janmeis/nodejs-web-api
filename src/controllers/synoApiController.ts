@@ -72,7 +72,7 @@ export const folder = async (req: Request, res: Response): Promise<void> => {
       `&offset=${offset}` +
       `&sort_by=${sortBy}` +
       `&sort_direction=${sortDirection}` +
-      `&additional=${encodeURIComponent('song_tag,song_audio,song_rating')}`;
+      `&additional=song_tag,song_audio,song_rating`;
 
     if (dirId) url += `&id=${dirId}`;
 
@@ -89,7 +89,10 @@ export const folder = async (req: Request, res: Response): Promise<void> => {
       }
       return folder;
     });
-    res.json(folders);
+    res.json({
+      total: response.data.data.total,
+      folders: folders,
+    });
   } catch (error) {
     const errorMessage =
       error instanceof Error ? error.message : 'An unknown error occurred';
@@ -177,7 +180,7 @@ export const song = async (req: Request, res: Response): Promise<void> => {
       `&offset=${offset}` +
       `&sort_by=${sortBy}` +
       `&sort_direction=${sortDirection}` +
-      `&additional=${encodeURIComponent('song_tag,song_audio,song_rating')}`;
+      `&additional=song_tag,song_audio,song_rating`;
 
     if (artist) url += `&artist=${artist}`;
     if (album) url += `&album=${album}`;
