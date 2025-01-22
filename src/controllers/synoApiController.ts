@@ -90,6 +90,10 @@ export const folder = async (req: Request, res: Response): Promise<void> => {
       return folder;
     });
     res.json({
+      cover:
+        folders.length > 0 && folders[0].album
+          ? getCover(folders[0].artist, folders[0].album)
+          : '',
       total: response.data.data.total,
       folders: folders,
     });
@@ -205,6 +209,12 @@ export const song = async (req: Request, res: Response): Promise<void> => {
     res.status(500).json({ error: errorMessage });
   }
 };
+
+const getCover = (artist?: string, album?: string): string =>
+  `${baseUrl}/AudioStation/cover.cgi?api=SYNO.AudioStation.Cover&version=3&method=getcover&output_default=true&is_hr=false` +
+  `&_sid=${sid}` +
+  `&artist_name=${encodeURIComponent(artist || '')}` +
+  `&album_name=${encodeURIComponent(album || '')}`;
 
 const populateSong = (additional: any): Partial<IFolder> => {
   const artist = `${additional.song_tag.album_artist}`
