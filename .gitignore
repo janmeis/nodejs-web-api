@@ -39,7 +39,6 @@ build/
 
 # Environment variables
 .env
-default/config.json
 
 # Swagger
 swagger.json

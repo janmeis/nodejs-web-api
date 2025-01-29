@@ -1,10 +1,10 @@
 import axios from 'axios';
-import config from 'config';
 import { Request, Response } from 'express';
 import { IFolder } from '../model/folder';
 import { formatDuration } from '../utils';
+import 'dotenv/config';
 
-const baseUrl = config.get<string>('synoUrl.base');
+const baseUrl = process.env.SYNO_URL || 'http://localhost:5000';
 let sid = '';
 
 axios.interceptors.request.use((config) => {
@@ -39,8 +39,8 @@ export const info = async (_: Request, res: Response): Promise<void> => {
 
 export const auth = async (_: Request, res: Response): Promise<void> => {
   try {
-    const account = config.get<string>('synoUrl.account');
-    const encodedPassword = config.get<string>('synoUrl.passwd');
+    const account = process.env.SYNO_ACCOUNT || 'admin';
+    const encodedPassword = process.env.SYNO_PASSWORD || '';
 
     // Decode the Base64-encoded password
     const password = Buffer.from(encodedPassword, 'base64').toString('utf-8');
@@ -62,7 +62,7 @@ export const folder = async (req: Request, res: Response): Promise<void> => {
     const dirId = req.query.dirId || null;
     const sortBy = req.query.sortBy || 'title';
     const sortDirection = req.query.sortDirection || 'asc';
-    const limit = req.query.limit || config.get<string>('synoUrl.limit');
+    const limit = req.query.limit || process.env.SYNO_LIMIT || '100';
     const offset = req.query.offset || 0;
 
     let url =
@@ -108,7 +108,7 @@ export const artist = async (req: Request, res: Response): Promise<void> => {
   try {
     const sortBy = req.query.sortBy || 'name';
     const sortDirection = req.query.sortDirection || 'asc';
-    const limit = req.query.limit || config.get<string>('synoUrl.limit');
+    const limit = req.query.limit || process.env.SYNO_LIMIT || '100';
     const offset = req.query.offset || 0;
     const filter = req.query.filter || null;
 
@@ -139,7 +139,7 @@ export const album = async (req: Request, res: Response): Promise<void> => {
     const artist = req.query.artist || '';
     const sortBy = req.query.sortBy || 'year';
     const sortDirection = req.query.sortDirection || 'asc';
-    const limit = req.query.limit || config.get<string>('synoUrl.limit');
+    const limit = req.query.limit || process.env.SYNO_LIMIT || '100';
     const offset = req.query.offset || 0;
     const filter = req.query.filter || null;
 
@@ -174,7 +174,7 @@ export const song = async (req: Request, res: Response): Promise<void> => {
     const album = req.query.album || '';
     const sortBy = req.query.sortBy || 'year';
     const sortDirection = req.query.sortDirection || 'asc';
-    const limit = req.query.limit || config.get<string>('synoUrl.limit');
+    const limit = req.query.limit || process.env.SYNO_LIMIT || '100';
     const offset = req.query.offset || 0;
 
     let url =

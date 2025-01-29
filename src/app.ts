@@ -1,7 +1,6 @@
 import express from 'express';
 import swaggerUi from 'swagger-ui-express';
 import swaggerJsdoc from 'swagger-jsdoc';
-import config from 'config';
 import { setRoutes } from './routes/routes';
 import cors from 'cors';
 import 'dotenv/config';
@@ -15,11 +14,12 @@ const PORT = process.env.PORT || 3001;
 // Swagger definition
 const swaggerOptions = {
   definition: {
-    openapi: config.get('swagger.openapi') as string,
+    openapi: '3.0.0',
     info: {
-      title: config.get('swagger.title') as string,
-      version: config.get('swagger.version') as string,
-      description: config.get('swagger.description') as string,
+      title: 'Synology Audiostation API',
+      version: '1.0.0',
+      description:
+        'Returns artist/album/track list from using Synology Audiostation API.',
     },
   },
   apis: ['./src/routes/*.ts'], // Path to the API docs
