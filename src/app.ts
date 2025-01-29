@@ -4,11 +4,13 @@ import swaggerJsdoc from 'swagger-jsdoc';
 import config from 'config';
 import { setRoutes } from './routes/routes';
 import cors from 'cors';
+import 'dotenv/config';
 
 const app = express();
 app.use(cors({ origin: true }));
 app.use(express.urlencoded({ extended: true }));
-const PORT = config.get<number>('port') || 3000;
+
+const PORT = process.env.PORT || 3001;
 
 // Swagger definition
 const swaggerOptions = {

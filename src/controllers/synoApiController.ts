@@ -211,7 +211,7 @@ export const song = async (req: Request, res: Response): Promise<void> => {
 };
 
 const getCover = (artist?: string, album?: string): string =>
-  `${baseUrl}/AudioStation/cover.cgi?api=SYNO.AudioStation.Cover&version=3&method=getcover&output_default=true&is_hr=false` +
+  `${baseUrl}/AudioStation/cover.cgi?api=SYNO.AudioStation.Cover&version=3&method=getcover&output_default=true&is_hr=false&view=playing` +
   `&_sid=${sid}` +
   `&artist_name=${encodeURIComponent(artist || '')}` +
   `&album_name=${encodeURIComponent(album || '')}`;
