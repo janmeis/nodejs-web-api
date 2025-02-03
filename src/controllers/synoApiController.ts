@@ -3,6 +3,7 @@ import { Request, Response } from 'express';
 import { IFolder } from '../model/folder';
 import { formatDuration } from '../utils';
 import 'dotenv/config';
+import { dir } from 'console';
 
 const baseUrl = process.env.SYNO_URL || 'http://localhost:5000';
 let sid = '';
@@ -89,11 +90,22 @@ export const folder = async (req: Request, res: Response): Promise<void> => {
       }
       return folder;
     });
+
+    let cover = '';
+    if (dirId && folders.length > 0) {
+      if (folders[0].album) {
+        cover = getCover(folders[0].artist, folders[0].album);
+      } else {
+        const randomIndex = Math.floor(Math.random() * folders.length);
+        const randomFolder = folders[randomIndex];
+        const coverUrl = url.replace(/id=([\d\w_]+)$/, `id=${randomFolder.id}`);
+        const coverResponse = await axios.get(coverUrl);
+        const songTag = coverResponse.data.data.items[0].additional.song_tag;
+        cover = getCover(songTag.artist, songTag.album);
+      }
+    }
     res.json({
-      cover:
-        folders.length > 0 && folders[0].album
-          ? getCover(folders[0].artist, folders[0].album)
-          : '',
+      cover,
       total: response.data.data.total,
       folders: folders,
     });

@@ -26,7 +26,7 @@ const config: Configuration = {
     extensions: ['.tsx', '.ts', '.js'], // Resolves these file extensions.
   },
   output: {
-    filename: 'app.js', // Names output file after its entry point ('bundle.js') - changed.
+    filename: '[name].js', // Names output file after its entry point ('bundle.js').
     path: resolve(__dirname, 'dist'), // Output directory for the bundled files.
   },
 };

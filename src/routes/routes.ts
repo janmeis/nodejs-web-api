@@ -11,7 +11,7 @@ import {
 export const setRoutes = (app: Express) => {
   /**
    * @swagger
-   * /info:
+   * /:
    *   get:
    *     summary: Get Syno API Info
    *     responses:
@@ -26,7 +26,7 @@ export const setRoutes = (app: Express) => {
    *                   type: string
    *                   example: Syno API Info
    */
-  app.get('/info', info);
+  app.get('/', info);
 
   /**
    * @swagger
