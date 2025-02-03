@@ -3,7 +3,6 @@ import { Request, Response } from 'express';
 import { IFolder } from '../model/folder';
 import { formatDuration } from '../utils';
 import 'dotenv/config';
-import { dir } from 'console';
 
 const baseUrl = process.env.SYNO_URL || 'http://localhost:5000';
 let sid = '';
@@ -215,6 +214,74 @@ export const song = async (req: Request, res: Response): Promise<void> => {
       return folder;
     });
     res.json(songs);
+  } catch (error) {
+    const errorMessage =
+      error instanceof Error ? error.message : 'An unknown error occurred';
+    res.status(500).json({ error: errorMessage });
+  }
+};
+
+export const updateplaylist = async (
+  req: Request,
+  res: Response,
+): Promise<void> => {
+  try {
+    const dirId = req.query.dirId || null;
+    const limit = req.query.limit || process.env.SYNO_LIMIT || '100';
+    const offset = req.query.offset || 0;
+    const _url = baseUrl.replace('/webapi', '/audio/webapi');
+
+    const url =
+      `${_url}/AudioStation/web_player.cgi?api=SYNO.AudioStation.WebPlayer&method=updateplaylist&library=shared&id=__SYNO_WEB_PLAYER__` +
+      `&offset=${offset}&limit=${limit}&play=true&version=1&keep_shuffle_order=false` +
+      `&containers_json=[{"type":"folder","id":"${dirId}","recursive":false,"sort_by":"artist","sort_direction":"ASC"}]` +
+      `&_sid=${sid}`;
+
+    console.log(url);
+    const response = await axios.get(url);
+    res.json(response.data);
+  } catch (error) {
+    const errorMessage =
+      error instanceof Error ? error.message : 'An unknown error occurred';
+    res.status(500).json({ error: errorMessage });
+  }
+};
+
+export const getplaylist = async (
+  req: Request,
+  res: Response,
+): Promise<void> => {
+  try {
+    const limit = req.query.limit || process.env.SYNO_LIMIT || '100';
+    const offset = req.query.offset || 0;
+    const _url = baseUrl.replace('/webapi', '/audio/webapi');
+    const url =
+      `${_url}/AudioStation/web_player.cgi?api=SYNO.AudioStation.WebPlayer&method=getplaylist&id=__SYNO_WEB_PLAYER__` +
+      `offset=${offset}&limit=${limit}&version=1&additional=song_tag,song_audio,song_rating` +
+      `&_sid=${sid}`;
+
+    console.log(url);
+    const response = await axios.get(url);
+    res.json(response.data);
+  } catch (error) {
+    const errorMessage =
+      error instanceof Error ? error.message : 'An unknown error occurred';
+    res.status(500).json({ error: errorMessage });
+  }
+};
+
+export const control = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const action = req.query.action || 'play';
+    const _url = baseUrl.replace('/webapi', '/audio/webapi');
+    const url =
+      `${_url}/AudioStation/web_player.cgi?api=SYNO.AudioStation.WebPlayer&method=control&id=__SYNO_WEB_PLAYER__` +
+      `&version=1&action=${action}` +
+      `&_sid=${sid}`;
+
+    console.log(url);
+    const response = await axios.get(url);
+    res.json(response.data);
   } catch (error) {
     const errorMessage =
       error instanceof Error ? error.message : 'An unknown error occurred';

@@ -6,6 +6,9 @@ import {
   artist,
   album,
   song,
+  updateplaylist,
+  getplaylist,
+  control,
 } from '../controllers/synoApiController';
 
 export const setRoutes = (app: Express) => {
@@ -254,4 +257,115 @@ export const setRoutes = (app: Express) => {
    *                     type: integer
    */
   app.get('/song', song);
+
+  /**
+   * @swagger
+   * /updateplaylist:
+   *   get:
+   *     summary: Play folder content
+   *     parameters:
+   *       - in: query
+   *         name: dirId
+   *         schema:
+   *           type: string
+   *         required: true
+   *         description: The ID of the directory to play
+   *       - in: query
+   *         name: limit
+   *         schema:
+   *           type: integer
+   *           default: 100
+   *         description: The maximum number of items to return
+   *       - in: query
+   *         name: offset
+   *         schema:
+   *           type: integer
+   *           default: 0
+   *         description: The offset of the first item
+   *     responses:
+   *       200:
+   *         description: Playback started
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: object
+   *               properties:
+   *                 success:
+   *                   type: boolean
+   *                   example: true
+   */
+  app.get('/updateplaylist', updateplaylist);
+
+  /**
+   * @swagger
+   * /getplaylist:
+   *   get:
+   *     summary: Get current playlist
+   *     parameters:
+   *       - in: query
+   *         name: limit
+   *         schema:
+   *           type: integer
+   *           default: 100
+   *         description: The maximum number of items to return
+   *       - in: query
+   *         name: offset
+   *         schema:
+   *           type: integer
+   *           default: 0
+   *         description: The offset of the first item
+   *     responses:
+   *       200:
+   *         description: Current playlist information
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: object
+   *               properties:
+   *                 data:
+   *                   type: object
+   *                   properties:
+   *                     songs:
+   *                       type: array
+   *                       items:
+   *                         type: object
+   *                         properties:
+   *                           id:
+   *                             type: string
+   *                           title:
+   *                             type: string
+   *                           artist:
+   *                             type: string
+   *                           album:
+   *                             type: string
+   */
+  app.get('/getplaylist', getplaylist);
+
+  /**
+   * @swagger
+   * /control:
+   *   get:
+   *     summary: Control player playback
+   *     tags: [Player Control]
+   *     parameters:
+   *       - in: query
+   *         name: action
+   *         schema:
+   *           type: string
+   *           enum: [play, pause, stop, next, previous]
+   *           default: play
+   *         description: The control action to perform
+   *     responses:
+   *       200:
+   *         description: Control action performed
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: object
+   *               properties:
+   *                 success:
+   *                   type: boolean
+   *                   example: true
+   */
+  app.get('/control', control);
 };
