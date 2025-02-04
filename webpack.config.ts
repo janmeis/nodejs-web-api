@@ -1,6 +1,6 @@
 // <see cref="https://www.nandhakumar.io/post/mastering-webpack-setting-up-webpack-with-typeScript-for-node-js-part-1" /
 
-import { Configuration } from 'webpack';
+import { Configuration, IgnorePlugin } from 'webpack';
 import { resolve } from 'path';
 
 const config: Configuration = {
@@ -29,5 +29,10 @@ const config: Configuration = {
     filename: '[name].js', // Names output file after its entry point ('bundle.js').
     path: resolve(__dirname, 'dist'), // Output directory for the bundled files.
   },
+  // plugins: [
+  //   new IgnorePlugin({
+  //     resourceRegExp: /^swagger-jsdoc$/,
+  //   }),
+  // ],
 };
 export default config;

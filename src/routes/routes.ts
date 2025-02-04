@@ -14,7 +14,7 @@ import {
 export const setRoutes = (app: Express) => {
   /**
    * @swagger
-   * /:
+   * /info:
    *   get:
    *     summary: Get Syno API Info
    *     responses:
@@ -29,7 +29,7 @@ export const setRoutes = (app: Express) => {
    *                   type: string
    *                   example: Syno API Info
    */
-  app.get('/', info);
+  app.get('/info', info);
 
   /**
    * @swagger
@@ -262,6 +262,7 @@ export const setRoutes = (app: Express) => {
    * @swagger
    * /updateplaylist:
    *   get:
+   *     tags: [Handle Playlists]
    *     summary: Play folder content
    *     parameters:
    *       - in: query
@@ -300,6 +301,7 @@ export const setRoutes = (app: Express) => {
    * @swagger
    * /getplaylist:
    *   get:
+   *     tags: [Handle Playlists]
    *     summary: Get current playlist
    *     parameters:
    *       - in: query

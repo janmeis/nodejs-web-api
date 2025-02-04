@@ -85,7 +85,8 @@ export const folder = async (req: Request, res: Response): Promise<void> => {
         item.additional.song_tag
       ) {
         const song = populateSong(item.additional);
-        folder = { ...folder, ...song };
+        const streamUrl = getStreamUrl(item.id);
+        folder = { ...folder, ...song, streamUrl };
       }
       return folder;
     });
@@ -232,7 +233,7 @@ export const updateplaylist = async (
     const _url = baseUrl.replace('/webapi', '/audio/webapi');
 
     const url =
-      `${_url}/AudioStation/web_player.cgi?api=SYNO.AudioStation.WebPlayer&method=updateplaylist&library=shared&id=__SYNO_WEB_PLAYER__` +
+      `${_url}/AudioStation/remote_player.cgi?api=SYNO.AudioStation.RemotePlayer&method=updateplaylist&library=shared&id=uuid:RINCON_48A6B82EE1EC01400` +
       `&offset=${offset}&limit=${limit}&play=true&version=1&keep_shuffle_order=false` +
       `&containers_json=[{"type":"folder","id":"${dirId}","recursive":false,"sort_by":"artist","sort_direction":"ASC"}]` +
       `&_sid=${sid}`;
@@ -256,8 +257,8 @@ export const getplaylist = async (
     const offset = req.query.offset || 0;
     const _url = baseUrl.replace('/webapi', '/audio/webapi');
     const url =
-      `${_url}/AudioStation/web_player.cgi?api=SYNO.AudioStation.WebPlayer&method=getplaylist&id=__SYNO_WEB_PLAYER__` +
-      `offset=${offset}&limit=${limit}&version=1&additional=song_tag,song_audio,song_rating` +
+      `${_url}/AudioStation/remote_player.cgi?api=SYNO.AudioStation.RemotePlayer&method=getplaylist&id=uuid:RINCON_48A6B82EE1EC01400` +
+      `&offset=${offset}&limit=${limit}&version=1&additional=song_tag,song_audio,song_rating` +
       `&_sid=${sid}`;
 
     console.log(url);
@@ -275,7 +276,7 @@ export const control = async (req: Request, res: Response): Promise<void> => {
     const action = req.query.action || 'play';
     const _url = baseUrl.replace('/webapi', '/audio/webapi');
     const url =
-      `${_url}/AudioStation/web_player.cgi?api=SYNO.AudioStation.WebPlayer&method=control&id=__SYNO_WEB_PLAYER__` +
+      `${_url}/AudioStation/remote_player.cgi?api=SYNO.AudioStation.RemotePlayer&method=control&id=uuid:RINCON_48A6B82EE1EC01400` +
       `&version=1&action=${action}` +
       `&_sid=${sid}`;
 
@@ -288,6 +289,9 @@ export const control = async (req: Request, res: Response): Promise<void> => {
     res.status(500).json({ error: errorMessage });
   }
 };
+
+const getStreamUrl = (musicId: string): string =>
+  `${baseUrl}/AudioStation/stream.cgi?api=SYNO.AudioStation.Stream&method=stream&version=2&id=${musicId}&_sid=${sid}`;
 
 const getCover = (artist?: string, album?: string): string =>
   `${baseUrl}/AudioStation/cover.cgi?api=SYNO.AudioStation.Cover&version=3&method=getcover&output_default=true&is_hr=false&view=playing` +

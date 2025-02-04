@@ -11,24 +11,26 @@ app.use(express.urlencoded({ extended: true }));
 
 const PORT = process.env.PORT || 3001;
 
-// Swagger definition
-const swaggerOptions = {
-  definition: {
-    openapi: '3.0.0',
-    info: {
-      title: 'Synology Audiostation API',
-      version: '1.0.0',
-      description:
-        'Returns artist/album/track list from using Synology Audiostation API.',
+if (process.env.NODE_ENV !== 'production') {
+  // Swagger definition
+  const swaggerOptions = {
+    definition: {
+      openapi: '3.0.0',
+      info: {
+        title: 'Synology Audiostation API',
+        version: '1.0.0',
+        description:
+          'Returns artist/album/track list from using Synology Audiostation API.',
+      },
     },
-  },
-  apis: ['./src/routes/*.ts'], // Path to the API docs
-};
+    apis: ['./src/routes/*.ts'], // Path to the API docs
+  };
 
-const swaggerSpec = swaggerJsdoc(swaggerOptions);
+  const swaggerSpec = swaggerJsdoc(swaggerOptions);
 
-// Middleware for Swagger
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+  // Middleware for Swagger
+  app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+}
 
 // Register routes
 setRoutes(app);
